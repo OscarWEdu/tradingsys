@@ -1,29 +1,22 @@
 ﻿using TradeSys;
 
-int CurrentScreen = (int) Screen.Login;
+TradingSystem tradingSystem = new TradingSystem();
 
 bool is_running = true;
 
-Console.Clear();
 while (is_running)
 {
-    switch (CurrentScreen)
+    Console.Clear();
+    if (tradingSystem.IsLoggedIn())
     {
-        case (int)Screen.Login:
-            return;
+        tradingSystem.MainScreen();
+    }
+    else
+    {
+        tradingSystem.LoginScreen();
     }
 
-    Console.WriteLine("Press Any Key to Continue");
-    string Input = Console.ReadLine().ToLower();
-
-    is_running = false;
+    Console.WriteLine("Press Any Key to Continue, or press ");
+    Console.ReadLine();
 }
 
-void LoginScreen()
-{
-    Console.WriteLine("Log in to your user account:");
-    Console.WriteLine("Username:");
-    string User = Console.ReadLine();
-    Console.WriteLine("Password:");
-    string Pass = Console.ReadLine();
-}

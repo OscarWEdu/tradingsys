@@ -1,3 +1,3 @@
 namespace TradeSys;
 
-enum Screen { None, Main, Login, Browse, Send, Add}
+enum Screen { None, Main, Login, Browse, Add, Send, History, Logout }

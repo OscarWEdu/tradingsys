@@ -32,6 +32,7 @@ void ScreenHandler()
         case ((int)Screen.History): tradingSystem.HistoryScreen(); break;
         case ((int)Screen.Pending): tradingSystem.PendingScreen(); break;
         case ((int)Screen.Logout): tradingSystem.LogoutScreen(); break;
+        case ((int)Screen.Create): tradingSystem.CreateScreen(); break;
         default: break;
     }
 }

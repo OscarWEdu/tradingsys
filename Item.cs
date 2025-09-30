@@ -12,4 +12,13 @@ class Item
         Description = description;
         Owner = owner;
     }
+    public string[] GetFields()
+    {
+        string[] Fields = new string[2];
+        Fields[0] = Name;
+        Fields[1] = Description;
+        Fields[2] = Owner;
+
+        return Fields;
+    }
 }

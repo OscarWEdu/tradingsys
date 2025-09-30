@@ -62,21 +62,30 @@ class TradingSystem
     {
 
     }
-    
+
     public void CreateScreen()
     {
-
+        Console.Clear();
+        Console.WriteLine("Username:");
+        string Name = Console.ReadLine();
+        Console.WriteLine("Password:");
+        string Pass = Console.ReadLine();
+        ActiveUser = new User(Name, Pass);
+        Users.Add(ActiveUser);
     }
 
     //Handles user login
     public void LoginScreen()
     {
-        Console.WriteLine("Log in to your user account:");
-        Console.WriteLine("Username:");
+        Console.WriteLine("Enter your username to login to your account, or type \"new\" to create a new account:");
         string Name = Console.ReadLine();
-        Console.WriteLine("Password:");
-        string Pass = Console.ReadLine();
-        ActiveUser = FindUser(Name, Pass);
+        if (string.Equals(Name, "new")) { CreateScreen(); }
+        else
+        {
+            Console.WriteLine("Password:");
+            string Pass = Console.ReadLine();
+            ActiveUser = FindUser(Name, Pass);
+        }
     }
 
     private User FindUser(string Name, string Pass)

@@ -2,7 +2,8 @@ namespace TradeSys;
 
 class TradingSystem
 {
-
+    List<User> Users = new List<User>();
+    List<Item> Items = new List<Item>();
     User ActiveUser = null;
     private int _CurrentScreen = (int)Screen.Main;
     public int CurrentScreen {get { return _CurrentScreen; }}
@@ -61,15 +62,35 @@ class TradingSystem
     {
 
     }
+    
+    public void CreateScreen()
+    {
+
+    }
 
     //Handles user login
     public void LoginScreen()
     {
         Console.WriteLine("Log in to your user account:");
         Console.WriteLine("Username:");
-        string User = Console.ReadLine();
+        string Name = Console.ReadLine();
         Console.WriteLine("Password:");
         string Pass = Console.ReadLine();
+        ActiveUser = FindUser(Name, Pass);
+    }
+
+    private User FindUser(string Name, string Pass)
+    {
+        foreach (User user in Users) {
+            if (user.MatchName(Name))
+            {
+                if (user.MatchPass(Pass))
+                {
+                    return user;
+                }
+            }
+        }
+        return null;
     }
 
     public bool IsLoggedIn()

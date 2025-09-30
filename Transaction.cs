@@ -7,14 +7,13 @@ class Transaction
     private Item ItemSent;
     private Item ItemRecieved;
 
-    public Transaction(Item itemSent)
+    public Transaction(Item itemSent, Item itemRecieved)
     {
         ItemSent = itemSent;
     }
 
-    public void CompleteTransaction(Item itemRecieved)
+    public void CompleteTransaction()
     {
         Request = false;
-        ItemRecieved = itemRecieved;
     }
 }

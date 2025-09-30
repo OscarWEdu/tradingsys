@@ -4,6 +4,7 @@ class TradingSystem
 {
     List<User> Users = new List<User>();
     List<Item> Items = new List<Item>();
+    List<Transaction> Transactions = new List<Transaction>();
     User ActiveUser = null;
     private int _CurrentScreen = (int)Screen.Main;
     public int CurrentScreen {get { return _CurrentScreen; }}
@@ -34,12 +35,29 @@ class TradingSystem
 
     public void BrowseScreen()
     {
-        
+        DisplayItems(false);
+        Console.WriteLine("Type in the name of the item you would like to trade for:");
     }
-    
+
+    private void DisplayItems(bool DisplayOwned)
+    {
+        Console.WriteLine("Items:");
+        foreach (Item item in Items)
+        {
+            if (!DisplayOwned && item.MatchOwned(ActiveUser.GetName()))
+            {
+                Console.WriteLine(item.Name + ": " + item.Description);
+            }
+        }
+    }
+
     public void AddScreen()
     {
-
+        Console.WriteLine("Write the Name of the item you would like to add:");
+        string Name = Console.ReadLine();
+        Console.WriteLine("Write the Description of the item you would like to add:");
+        string Description = Console.ReadLine();
+        Items.Add(new Item(Name, Description, ActiveUser.GetName()));
     }
     
     public void SendScreen()
@@ -100,6 +118,28 @@ class TradingSystem
             }
         }
         return null;
+    }
+
+    private void StoreItems()
+    {
+        List<string> output = new List<string>();
+        foreach (Item item in Items)
+        {
+            output.AddRange(item.GetFields());
+            output.Add("\n");
+        }
+        File.WriteAllLines("items.csv", output);
+    }
+
+    private void LoadItems()
+    {
+        String[] items_csv = File.ReadAllLines("items.csv");
+
+        foreach (string data in items_csv)
+        {
+            string[] split_data = data.Split(",");
+            Items.Add(new Item(split_data[0], split_data[1], split_data[2]));
+        }
     }
 
     public bool IsLoggedIn()

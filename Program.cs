@@ -25,22 +25,14 @@ void ScreenHandler()
     int screen = tradingSystem.CurrentScreen;
     switch (screen)
     {
-        case ((int)Screen.Browse):
-            break;
-            
-        case ((int)Screen.Add):
-            break;
-            
-        case ((int)Screen.Send):
-            break;
-            
-        case ((int)Screen.History):
-            break;
-            
-        case ((int)Screen.Logout):
-            break;
-        
-        
+        case ((int)Screen.Main): tradingSystem.MainScreen(); break;
+        case ((int)Screen.Browse): tradingSystem.BrowseScreen(); break;
+        case ((int)Screen.Add): tradingSystem.AddScreen(); break;
+        case ((int)Screen.Send): tradingSystem.SendScreen(); break;
+        case ((int)Screen.History): tradingSystem.HistoryScreen(); break;
+        case ((int)Screen.Pending): tradingSystem.PendingScreen(); break;
+        case ((int)Screen.Logout): tradingSystem.LogoutScreen(); break;
+        default: break;
     }
 }
 

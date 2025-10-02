@@ -14,7 +14,7 @@ class Item
     }
     public string[] GetFields()
     {
-        string[] Fields = new string[2];
+        string[] Fields = new string[3];
         Fields[0] = Name;
         Fields[1] = Description;
         Fields[2] = Owner;

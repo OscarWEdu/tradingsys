@@ -43,19 +43,19 @@ class Transaction
         Output += "From: " + DataList[4]; //UserSent
         Output += " to: " + DataList[7]; //UserRecieved
         Output += "\nAt date: " + DataList[1]; //TransDate
-        Output += "\nTraded: " + DataList[2] + " for " + DataList[5] + "\n"; //ItemSent / 
-        Console.WriteLine();
+        Output += "\nTraded: " + DataList[2] + " for " + DataList[5] + "\n"; //ItemSent / Itemrecieved .Name
+        Console.WriteLine(Output);
     }
 
     public void PrintPending()
     {
         List<string> DataList = WriteAsString();
         string Output = "";
-        Output += "User: " + DataList[2]; //UserSent
-        Output += " wants to trade " + DataList[7]; //ItemRecieved.Name
-        Output += " + for : " + DataList[4]; //ItemSent.Name
-        Output += "\nThe request was sent at: " + DataList[1] + "\n"; // / Itemrecieved .Name
-        Console.WriteLine();
+        Output += "User: " + DataList[4]; //UserSent
+        Output += " wants to trade: " + DataList[5]; //ItemRecieved.Name
+        Output += " for :" + DataList[2]; //ItemSent.Name
+        Output += "\nThe request was sent at: " + DataList[1] + "\n"; //TransDate
+        Console.WriteLine(Output);
     }
 
     public bool IsPending() { return Pending; }

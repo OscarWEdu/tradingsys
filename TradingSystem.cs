@@ -19,7 +19,7 @@ class TradingSystem
         Items.Add(new Item("Man", "A living human man", "1"));
         Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
         Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
-        Transactions.Add(new Transaction(GetItem("Man"), GetItem("Gecko")));
+        Transactions.Add(new Transaction(GetItem("Man"), GetItem("Lizard")));
     }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
@@ -119,7 +119,7 @@ class TradingSystem
         ItemRecieved.Owner = ItemSent.Owner;
         ItemSent.Owner = Recipient;
     }
-    
+
     public void HistoryScreen()
     {
         foreach (Transaction transaction in Transactions)
@@ -129,6 +129,7 @@ class TradingSystem
                 transaction.Print();
             }
         }
+        ReturnToMain();
     }
     
     //Handle Pending trade requests
@@ -136,16 +137,17 @@ class TradingSystem
     {
         foreach (Transaction transaction in Transactions)
         {
-            if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
-            {
-                transaction.Print();
-            }
+            transaction.Print();
+            // if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
+            // {
+            //     transaction.Print();
+            // }
         }
     }
-    
+
     public void LogoutScreen()
     {
-
+        User ActiveUser = null;
     }
 
     public void CreateScreen()

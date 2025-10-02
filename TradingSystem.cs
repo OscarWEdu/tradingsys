@@ -136,6 +136,7 @@ class TradingSystem
     public void PendingScreen()
     {
         Console.Clear();
+        Console.WriteLine("Pending Transactions:");
         foreach (Transaction transaction in Transactions)
         {
             if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))

@@ -4,7 +4,7 @@ class Item
 {
     public readonly string Name;
     public readonly string Description;
-    private string Owner;
+    public string Owner { get; }
 
     public Item(string name, string description, string owner)
     {
@@ -20,5 +20,13 @@ class Item
         Fields[2] = Owner;
 
         return Fields;
+    }
+    public bool MatchOwned(string Username)
+    {
+        if (Username == Owner)
+        {
+            return true;
+        }
+        return false;
     }
 }

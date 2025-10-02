@@ -9,16 +9,20 @@ class TradingSystem
     private int _CurrentScreen = (int)Screen.Main;
     public int CurrentScreen {get { return _CurrentScreen; }}
 
-    string NormalizedInput()
+    //Creates some test data
+    public TradingSystem()
     {
-        return Console.ReadLine().ToLower();
+        Users.Add(new User("1", "1"));
+        Users.Add(new User("2", "2"));
+        Items.Add(new Item("Boat", "A full size boat, should definitely not be traded for a pencil", "1"));
+        Items.Add(new Item("Pencil", "A pencil", "2"));
     }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
     public void MainScreen()
     {
         Console.WriteLine("Select your choice:\n\"browse\" to view available items\n\"add\" to add available item\n\"send\" to send a trade request\n\"history\" to view trade history\n\"pending\" to view active requests\n\"logout\" to logout");
-        string Input = Console.ReadLine().ToLower();
+        string Input = NormalizedInput();
 
         switch (Input)
         {
@@ -33,10 +37,36 @@ class TradingSystem
         }
     }
 
+    string NormalizedInput()
+    {
+        return Console.ReadLine().ToLower();
+    }
+
+    private void ReturnToMain() { _CurrentScreen = (int)Screen.Main; }
+
     public void BrowseScreen()
     {
         DisplayItems(false);
         Console.WriteLine("Type in the name of the item you would like to trade for:");
+        string ItemInName = Console.ReadLine();
+        Item ItemIn = GetItem(ItemInName);
+        Console.WriteLine("Type in the name of the owned item you are offering:");
+        DisplayItems(true);
+        string ItemOutName = Console.ReadLine();
+        Item ItemOut = GetItem(ItemOutName);
+        Transactions.Add(new Transaction(ItemIn, ItemOut));
+    }
+
+    private Item GetItem(string ItemName)
+    {
+        foreach (Item item in Items)
+        {
+            if (item.Name == ItemName)
+            {
+                return item;
+            }
+        }
+        return null;
     }
 
     private void DisplayItems(bool DisplayOwned)
@@ -44,7 +74,12 @@ class TradingSystem
         Console.WriteLine("Items:");
         foreach (Item item in Items)
         {
-            if (!DisplayOwned && item.MatchOwned(ActiveUser.GetName()))
+            if (!DisplayOwned && !item.MatchOwned(ActiveUser.GetName()))
+            {
+                Console.WriteLine(item.Name + ": " + item.Description);
+            }
+
+            else if (DisplayOwned && item.MatchOwned(ActiveUser.GetName()))
             {
                 Console.WriteLine(item.Name + ": " + item.Description);
             }
@@ -58,22 +93,48 @@ class TradingSystem
         Console.WriteLine("Write the Description of the item you would like to add:");
         string Description = Console.ReadLine();
         Items.Add(new Item(Name, Description, ActiveUser.GetName()));
+        ReturnToMain();
     }
     
     public void SendScreen()
     {
+        
+    }
+    
+    private void CompleteTransaction(Transaction transaction)
+    {
+        TradeItem(transaction.ItemSent, transaction.ItemRecieved);
+        transaction.CompleteTransaction();
+    }
 
+    private void TradeItem(Item ItemSent, Item ItemRecieved)
+    {
+        string Recipient = ItemRecieved.Owner;
+        ItemRecieved.Owner = ItemSent.Owner;
+        ItemSent.Owner = Recipient;
     }
     
     public void HistoryScreen()
     {
-
+        foreach (Transaction transaction in Transactions)
+        {
+            if (!transaction.IsPending())
+            {
+                transaction.Print();
+            }
+        }
     }
     
     //Handle Pending trade requests
     public void PendingScreen()
     {
-
+        foreach (Transaction transaction in Transactions)
+        {
+            if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
+            {
+                transaction.Print();
+            }
+        }
     }
     
     public void LogoutScreen()

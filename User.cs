@@ -10,6 +10,7 @@ class User
         Username = username;
         Password = password;
     }
+    public string GetName() { return Username; }
     public bool MatchName(string username)
     {
         if (Username == username)

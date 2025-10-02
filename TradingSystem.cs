@@ -122,6 +122,7 @@ class TradingSystem
 
     public void HistoryScreen()
     {
+        Console.WriteLine("Completed Transactions:");
         foreach (Transaction transaction in Transactions)
         {
             if (!transaction.IsPending())
@@ -144,7 +145,22 @@ class TradingSystem
                 transaction.Print();
             }
         }
-        Console.WriteLine("Type the name of the item in the trade you would like to accept\nType clr to reject all trades\nOr type anything else to return to main menu");
+        Console.WriteLine("Type the name of the item in the trade you would like to accept\nType clr followed by the name to reject the trade\nOr type anything else to return to main menu");
+        string Name = Console.ReadLine();
+        string[] NameArray = Name.Split(' ');
+        bool ExitPending = true;
+        foreach (Transaction transaction in Transactions)
+        {
+            if (transaction.IsRecipient(ActiveUser.GetName()))
+            {
+                if (NameArray.Length > 1)
+                {
+                    if (NameArray[0] == "clr" && transaction.ItemRecieved.Name == NameArray[1]) { Transactions.Remove(transaction); ExitPending = false; break; }
+                }
+                else if (transaction.ItemRecieved.Name == Name) { CompleteTransaction(transaction); ExitPending = false; }
+            }
+        }
+        if (ExitPending) { ReturnToMain(); }
     }
 
     public void LogoutScreen()

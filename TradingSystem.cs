@@ -165,7 +165,7 @@ class TradingSystem
 
     public void LogoutScreen()
     {
-        User ActiveUser = null;
+        ActiveUser = null;
     }
 
     public void CreateScreen()
@@ -177,6 +177,7 @@ class TradingSystem
         string Pass = Console.ReadLine();
         ActiveUser = new User(Name, Pass);
         Users.Add(ActiveUser);
+        ReturnToMain();
     }
 
     //Handles user login
@@ -190,6 +191,7 @@ class TradingSystem
             Console.WriteLine("Password:");
             string Pass = Console.ReadLine();
             ActiveUser = FindUser(Name, Pass);
+            ReturnToMain();
         }
     }
 

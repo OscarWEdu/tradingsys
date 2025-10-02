@@ -53,7 +53,7 @@ class Transaction
         string Output = "";
         Output += "User: " + DataList[4]; //UserSent
         Output += " wants to trade: " + DataList[5]; //ItemRecieved.Name
-        Output += " for :" + DataList[2]; //ItemSent.Name
+        Output += " for: " + DataList[2]; //ItemSent.Name
         Output += "\nThe request was sent at: " + DataList[1] + "\n"; //TransDate
         Console.WriteLine(Output);
     }

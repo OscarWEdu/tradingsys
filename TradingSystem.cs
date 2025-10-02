@@ -46,14 +46,17 @@ class TradingSystem
         return Console.ReadLine().ToLower();
     }
 
+    //Sets _CurrentScreen to Main, this is then handled by the main program loop.
     private void ReturnToMain() { _CurrentScreen = (int)Screen.Main; }
 
+    //Displays all owned items
     public void BrowseScreen()
     {
         DisplayItems(true);
         ReturnToMain();
     }
 
+    //Displays pending transactions, and then prompts the user to create a transaction for a selected item.
     public void SendScreen()
     {
         DisplayItems(false);
@@ -68,6 +71,7 @@ class TradingSystem
         ReturnToMain();
     }
 
+    //Gets Item by Name
     private Item GetItem(string ItemName)
     {
         foreach (Item item in Items)
@@ -80,6 +84,7 @@ class TradingSystem
         return null;
     }
 
+    //Displays either all Items belonging to the User or all non-owned Items
     private void DisplayItems(bool DisplayOwned)
     {
         Console.WriteLine("Items:");
@@ -97,6 +102,7 @@ class TradingSystem
         }
     }
 
+    //Prompts the User to create a new Item and adds it to the Items list
     public void AddScreen()
     {
         Console.WriteLine("Write the Name of the item you would like to add:");
@@ -113,6 +119,7 @@ class TradingSystem
         transaction.CompleteTransaction();
     }
 
+    //Swaps the Owner variable of 2 items
     private void TradeItem(Item ItemSent, Item ItemRecieved)
     {
         string Recipient = ItemRecieved.Owner;
@@ -120,6 +127,7 @@ class TradingSystem
         ItemSent.Owner = Recipient;
     }
 
+    //Displays all completed transactions
     public void HistoryScreen()
     {
         Console.WriteLine("Completed Transactions:");
@@ -133,7 +141,7 @@ class TradingSystem
         ReturnToMain();
     }
 
-    //Handle Pending trade requests
+    //Displays and allows the user to either accept or remove Pending trade requests in the Transactions list
     public void PendingScreen()
     {
         Console.Clear();
@@ -166,8 +174,10 @@ class TradingSystem
     public void LogoutScreen()
     {
         ActiveUser = null;
+        _CurrentScreen = (int)Screen.Login;
     }
 
+    //Allows the user to create a new User and adds it to the list
     public void CreateScreen()
     {
         Console.Clear();
@@ -195,9 +205,11 @@ class TradingSystem
         }
     }
 
+    //Fetches a User with a given username and password
     private User FindUser(string Name, string Pass)
     {
-        foreach (User user in Users) {
+        foreach (User user in Users)
+        {
             if (user.MatchName(Name))
             {
                 if (user.MatchPass(Pass))

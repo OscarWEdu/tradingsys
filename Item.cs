@@ -12,6 +12,8 @@ class Item
         Description = description;
         Owner = owner;
     }
+
+    //Returns all variables in an array
     public string[] GetFields()
     {
         string[] Fields = new string[3];

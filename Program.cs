@@ -21,6 +21,7 @@ while (is_running)
 
 }
 
+//Executes the *Screen Method corresponding with the CurrentScreen variable
 void ScreenHandler()
 {
     int screen = tradingSystem.CurrentScreen;
@@ -32,6 +33,7 @@ void ScreenHandler()
         case ((int)Screen.Send): tradingSystem.SendScreen(); break;
         case ((int)Screen.History): tradingSystem.HistoryScreen(); break;
         case ((int)Screen.Pending): tradingSystem.PendingScreen(); break;
+        case ((int)Screen.Login): tradingSystem.LoginScreen(); break;
         case ((int)Screen.Logout): tradingSystem.LogoutScreen(); break;
         case ((int)Screen.Create): tradingSystem.CreateScreen(); break;
         default: break;

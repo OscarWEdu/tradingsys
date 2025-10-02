@@ -15,6 +15,7 @@ while (is_running)
     string Input = Console.ReadLine();
     if (Input == "0")
     {
+        Console.Clear();
         is_running = false;
     }
 

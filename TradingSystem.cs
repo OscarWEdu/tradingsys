@@ -19,7 +19,7 @@ class TradingSystem
         Items.Add(new Item("Man", "A living human man", "1"));
         Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
         Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
-        Transactions.Add(new Transaction(GetItem("Man"), GetItem("Lizard")));
+        Transactions.Add(new Transaction(GetItem("Lizard"), GetItem("Man")));
     }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
@@ -131,18 +131,19 @@ class TradingSystem
         }
         ReturnToMain();
     }
-    
+
     //Handle Pending trade requests
     public void PendingScreen()
     {
+        Console.Clear();
         foreach (Transaction transaction in Transactions)
         {
-            transaction.Print();
-            // if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
-            // {
-            //     transaction.Print();
-            // }
+            if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
+            {
+                transaction.Print();
+            }
         }
+        Console.WriteLine("Type the name of the item in the trade you would like to accept\nType clr to reject all trades\nOr type anything else to return to main menu");
     }
 
     public void LogoutScreen()

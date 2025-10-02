@@ -16,6 +16,10 @@ class TradingSystem
         Users.Add(new User("2", "2"));
         Items.Add(new Item("Boat", "A full size boat, should definitely not be traded for a pencil", "1"));
         Items.Add(new Item("Pencil", "A pencil", "2"));
+        Items.Add(new Item("Man", "A living human man", "1"));
+        Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
+        Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
+        Transactions.Add(new Transaction(GetItem("Man"), GetItem("Gecko")));
     }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
@@ -46,6 +50,12 @@ class TradingSystem
 
     public void BrowseScreen()
     {
+        DisplayItems(true);
+        ReturnToMain();
+    }
+
+    public void SendScreen()
+    {
         DisplayItems(false);
         Console.WriteLine("Type in the name of the item you would like to trade for:");
         string ItemInName = Console.ReadLine();
@@ -55,6 +65,7 @@ class TradingSystem
         string ItemOutName = Console.ReadLine();
         Item ItemOut = GetItem(ItemOutName);
         Transactions.Add(new Transaction(ItemIn, ItemOut));
+        ReturnToMain();
     }
 
     private Item GetItem(string ItemName)
@@ -94,11 +105,6 @@ class TradingSystem
         string Description = Console.ReadLine();
         Items.Add(new Item(Name, Description, ActiveUser.GetName()));
         ReturnToMain();
-    }
-    
-    public void SendScreen()
-    {
-        
     }
     
     private void CompleteTransaction(Transaction transaction)

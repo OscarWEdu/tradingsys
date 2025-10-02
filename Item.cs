@@ -4,7 +4,7 @@ class Item
 {
     public readonly string Name;
     public readonly string Description;
-    public string Owner { get; }
+    public string Owner { get; set; }
 
     public Item(string name, string description, string owner)
     {

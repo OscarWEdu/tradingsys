@@ -4,8 +4,8 @@ class Transaction
 {
     private bool Pending = true;
     private DateTime TransDate = new DateTime();
-    private Item ItemSent;
-    private Item ItemRecieved;
+    public readonly Item ItemSent;
+    public readonly Item ItemRecieved;
     public Transaction(Item itemSent, Item itemRecieved)
     {
         ItemSent = itemSent;

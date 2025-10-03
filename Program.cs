@@ -18,7 +18,7 @@ while (is_running)
         Console.Clear();
         is_running = false;
     }
-
+    tradingSystem.StoreItems();
 }
 
 //Executes the *Screen Method corresponding with the CurrentScreen variable

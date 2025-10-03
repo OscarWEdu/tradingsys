@@ -174,7 +174,7 @@ class TradingSystem
     public void LogoutScreen()
     {
         ActiveUser = null;
-        _CurrentScreen = (int)Screen.Login;
+        _CurrentScreen = (int)Screen.Login; //TODO: Never gets checked
     }
 
     //Allows the user to create a new User and adds it to the list
@@ -221,20 +221,37 @@ class TradingSystem
         return null;
     }
 
-    private void StoreItems()
+    public void StoreItems()
     {
         List<string> output = new List<string>();
+        foreach (User user in Users)
+        {
+            output.AddRange(user.GetFields());
+            output.Add("\n");
+        }
+        output.Add("\n");
         foreach (Item item in Items)
         {
             output.AddRange(item.GetFields());
             output.Add("\n");
         }
-        File.WriteAllLines("items.csv", output);
+        output.Add("\n");
+        foreach (Transaction transaction in Transactions)
+        {
+            output.AddRange(transaction.WriteAsString());
+            output.Add("\n");
+        }
+        output.Add("\n");
+        foreach (string point in output)
+        {
+            Console.WriteLine(point);
+        }
+        File.WriteAllLines("backup.csv", output);
     }
 
     private void LoadItems()
     {
-        String[] items_csv = File.ReadAllLines("items.csv");
+        String[] items_csv = File.ReadAllLines("backup.csv");
 
         foreach (string data in items_csv)
         {

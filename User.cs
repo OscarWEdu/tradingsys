@@ -27,4 +27,14 @@ class User
         }
         return false;
     }
+
+    //Returns all variables in an array
+    public string[] GetFields()
+    {
+        string[] Fields = new string[2];
+        Fields[0] = Username;
+        Fields[1] = Password;
+
+        return Fields;
+    }
 }

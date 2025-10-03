@@ -6,6 +6,8 @@ class Transaction
     private DateTime TransDate = new DateTime();
     public readonly Item ItemSent;
     public readonly Item ItemRecieved;
+
+    //Sets a Transaction up as pending
     public Transaction(Item itemSent, Item itemRecieved)
     {
         ItemSent = itemSent;
@@ -13,12 +15,14 @@ class Transaction
         TransDate = DateTime.Now;
     }
 
+    //Sets the Transaction as completed and updates TransDate to show when it was completed rather than when the Transaction was sent
     public void CompleteTransaction()
     {
         Pending = false;
         TransDate = DateTime.Now;
     }
 
+    //Outputs all variables as a string array, including the variables of the Item objects
     public List<string> WriteAsString()
     {
         List<string> Output = new List<string>();
@@ -36,6 +40,7 @@ class Transaction
         else { PrintCompleted(); }
     }
 
+    //Prints the output of WriteAsString in a legible format, formatted for completed transactions
     public void PrintCompleted()
     {
         List<string> DataList = WriteAsString();
@@ -47,6 +52,7 @@ class Transaction
         Console.WriteLine(Output);
     }
 
+    //Prints the output of WriteAsString in a legible format, formatted for pending transactions
     public void PrintPending()
     {
         List<string> DataList = WriteAsString();
@@ -60,6 +66,7 @@ class Transaction
 
     public bool IsPending() { return Pending; }
 
+    //Returns whether the provided User owns the recieved Item
     public bool IsRecipient(string Username)
     {
         if (ItemRecieved.MatchOwned(Username))

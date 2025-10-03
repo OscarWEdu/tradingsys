@@ -1,6 +1,0 @@
-namespace TradeSys;
-
-class SaveLoad
-{
-    
-}

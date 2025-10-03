@@ -25,18 +25,18 @@ while (is_running)
 //Executes the *Screen Method corresponding with the CurrentScreen variable
 void ScreenHandler()
 {
-    int screen = tradingSystem.CurrentScreen;
+    Screen screen = tradingSystem.CurrentScreen;
     switch (screen)
     {
-        case ((int)Screen.Main): tradingSystem.MainScreen(); break;
-        case ((int)Screen.Browse): tradingSystem.BrowseScreen(); break;
-        case ((int)Screen.Add): tradingSystem.AddScreen(); break;
-        case ((int)Screen.Send): tradingSystem.SendScreen(); break;
-        case ((int)Screen.History): tradingSystem.HistoryScreen(); break;
-        case ((int)Screen.Pending): tradingSystem.PendingScreen(); break;
-        case ((int)Screen.Login): tradingSystem.LoginScreen(); break;
-        case ((int)Screen.Logout): tradingSystem.LogoutScreen(); break;
-        case ((int)Screen.Create): tradingSystem.CreateScreen(); break;
+        case (Screen.Main): tradingSystem.MainScreen(); break;
+        case (Screen.Browse): tradingSystem.BrowseScreen(); break;
+        case (Screen.Add): tradingSystem.AddScreen(); break;
+        case (Screen.Send): tradingSystem.SendScreen(); break;
+        case (Screen.History): tradingSystem.HistoryScreen(); break;
+        case (Screen.Pending): tradingSystem.PendingScreen(); break;
+        case (Screen.Login): tradingSystem.LoginScreen(); break;
+        case (Screen.Logout): tradingSystem.LogoutScreen(); break;
+        case (Screen.Create): tradingSystem.CreateScreen(); break;
         default: break;
     }
 }

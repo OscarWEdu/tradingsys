@@ -6,9 +6,9 @@ class TradingSystem
     List<User> Users = new List<User>();
     List<Item> Items = new List<Item>();
     List<Transaction> Transactions = new List<Transaction>();
-    User ActiveUser = null;
-    private int _CurrentScreen = (int)Screen.Main;
-    public int CurrentScreen { get { return _CurrentScreen; } }
+    User? ActiveUser = null;
+    private Screen _CurrentScreen = Screen.Main;
+    public Screen CurrentScreen { get { return _CurrentScreen; } }
 
     // //Creates some test data
     // public TradingSystem()
@@ -31,12 +31,12 @@ class TradingSystem
 
         switch (Input)
         {
-            case "browse": _CurrentScreen = (int)Screen.Browse; break;
-            case "add": _CurrentScreen = (int)Screen.Add; break;
-            case "send": _CurrentScreen = (int)Screen.Send; break;
-            case "history": _CurrentScreen = (int)Screen.History; break;
-            case "pending": _CurrentScreen = (int)Screen.Pending; break;
-            case "logout": _CurrentScreen = (int)Screen.Logout; break;
+            case "browse": _CurrentScreen = Screen.Browse; break;
+            case "add": _CurrentScreen = Screen.Add; break;
+            case "send": _CurrentScreen = Screen.Send; break;
+            case "history": _CurrentScreen = Screen.History; break;
+            case "pending": _CurrentScreen = Screen.Pending; break;
+            case "logout": _CurrentScreen = Screen.Logout; break;
 
             default: Console.WriteLine("Invalid Input"); break;
         }
@@ -49,7 +49,7 @@ class TradingSystem
     }
 
     //Sets _CurrentScreen to Main, this is then handled by the main program loop.
-    private void ReturnToMain() { _CurrentScreen = (int)Screen.Main; }
+    private void ReturnToMain() { _CurrentScreen = Screen.Main; }
 
     //Displays all owned items
     public void BrowseScreen()
@@ -64,17 +64,17 @@ class TradingSystem
         DisplayItems(false);
         Console.WriteLine("Type in the name of the item you would like to trade for:");
         string ItemInName = Console.ReadLine();
-        Item ItemIn = GetItem(ItemInName);
+        Item? ItemIn = GetItem(ItemInName);
         Console.WriteLine("Type in the name of the owned item you are offering:");
         DisplayItems(true);
         string ItemOutName = Console.ReadLine();
-        Item ItemOut = GetItem(ItemOutName);
-        Transactions.Add(new Transaction(ItemIn, ItemOut));
+        Item? ItemOut = GetItem(ItemOutName);
+        if (ItemIn != null && ItemOut != null) { Transactions.Add(new Transaction(ItemIn, ItemOut)); }
         ReturnToMain();
     }
 
     //Gets Item by Name
-    private Item GetItem(string ItemName)
+    private Item? GetItem(string ItemName)
     {
         foreach (Item item in Items)
         {
@@ -176,7 +176,7 @@ class TradingSystem
     public void LogoutScreen()
     {
         ActiveUser = null;
-        _CurrentScreen = (int)Screen.Login; //TODO: Never gets checked
+        _CurrentScreen = Screen.Login; //TODO: Never gets checked
     }
 
     //Allows the user to create a new User and adds it to the list
@@ -208,7 +208,7 @@ class TradingSystem
     }
 
     //Fetches a User with a given username and password
-    private User FindUser(string Name, string Pass)
+    private User? FindUser(string Name, string Pass)
     {
         foreach (User user in Users)
         {

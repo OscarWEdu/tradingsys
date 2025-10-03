@@ -4,14 +4,14 @@ class Transaction
 {
     private bool Pending = true;
     private DateTime TransDate = new DateTime();
-    public readonly Item ItemSent;
-    public readonly Item ItemRecieved;
+    public readonly List<Item> ItemsSent = new List<Item>();
+    public readonly List<Item> ItemsRecieved = new List<Item>();
 
     //Sets a Transaction up as pending
-    public Transaction(Item itemSent, Item itemRecieved)
+    public Transaction(List<Item> itemsSent, List<Item> itemsRecieved)
     {
-        ItemSent = itemSent;
-        ItemRecieved = itemRecieved;
+        ItemsSent = itemsSent;
+        ItemsRecieved = itemsRecieved;
         TransDate = DateTime.Now;
     }
 
@@ -34,8 +34,8 @@ class Transaction
         List<string> Output = new List<string>();
         Output.Add(Pending.ToString());
         Output.Add(TransDate.ToString());
-        Output.AddRange(ItemSent.GetFields());
-        Output.AddRange(ItemRecieved.GetFields());
+        Output.AddRange(ItemsSent[0].GetFields());
+        Output.AddRange(ItemsRecieved[0].GetFields());
 
         return Output;
     }
@@ -75,7 +75,7 @@ class Transaction
     //Returns whether the provided User owns the recieved Item
     public bool IsRecipient(string Username)
     {
-        if (ItemRecieved.MatchOwned(Username))
+        if (ItemsRecieved[0].MatchOwned(Username))
         {
             return true;
         }

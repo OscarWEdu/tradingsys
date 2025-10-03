@@ -64,12 +64,14 @@ class TradingSystem
         DisplayItems(false);
         Console.WriteLine("Type in the name of the item you would like to trade for:");
         string ItemInName = Console.ReadLine();
-        Item? ItemIn = GetItem(ItemInName);
+        List<Item?> ItemsIn = new List<Item?>();
+        ItemsIn.Add(GetItem(ItemInName));
         Console.WriteLine("Type in the name of the owned item you are offering:");
         DisplayItems(true);
         string ItemOutName = Console.ReadLine();
-        Item? ItemOut = GetItem(ItemOutName);
-        if (ItemIn != null && ItemOut != null) { Transactions.Add(new Transaction(ItemIn, ItemOut)); }
+        List<Item?> ItemsOut = new List<Item?>();
+        ItemsOut.Add(GetItem(ItemOutName));
+        if (ItemsIn[0] != null && ItemsOut[0] != null) { Transactions.Add(new Transaction(ItemsOut, ItemsIn)); }
         ReturnToMain();
     }
 
@@ -117,7 +119,7 @@ class TradingSystem
 
     private void CompleteTransaction(Transaction transaction)
     {
-        TradeItem(transaction.ItemSent, transaction.ItemRecieved);
+        TradeItem(transaction.ItemsSent[0], transaction.ItemsRecieved[0]);
         transaction.CompleteTransaction();
     }
 
@@ -165,9 +167,9 @@ class TradingSystem
             {
                 if (NameArray.Length > 1)
                 {
-                    if (NameArray[0] == "clr" && transaction.ItemRecieved.Name == NameArray[1]) { Transactions.Remove(transaction); ExitPending = false; break; }
+                    if (NameArray[0] == "clr" && transaction.ItemsRecieved[0].Name == NameArray[1]) { Transactions.Remove(transaction); ExitPending = false; break; }
                 }
-                else if (transaction.ItemRecieved.Name == Name) { CompleteTransaction(transaction); ExitPending = false; }
+                else if (transaction.ItemsRecieved[0].Name == Name) { CompleteTransaction(transaction); ExitPending = false; }
             }
         }
         if (ExitPending) { ReturnToMain(); }
@@ -294,9 +296,12 @@ class TradingSystem
         {
             string[] DataField = Data.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            Item ItemOut = GetItem(DataField[2]);
-            Item ItemIn = GetItem(DataField[5]);
-            Transaction LoadedTrans = new Transaction(ItemOut, ItemIn);
+            List<Item?> ItemsIn = new List<Item?>();
+            List<Item?> ItemsOut = new List<Item?>();
+            ItemsOut.Add(GetItem(DataField[2]));
+            ItemsIn.Add(GetItem(DataField[5]));
+            if (ItemsIn[0] != null && ItemsOut[0] != null) { Transactions.Add(new Transaction(ItemsOut, ItemsIn)); }
+            Transaction LoadedTrans = new Transaction(ItemsOut, ItemsIn);
             LoadedTrans.LoadTransactionData(bool.Parse(DataField[0]), DateTime.Parse(DataField[1])); //Todo: use tryparse
             Transactions.Add(LoadedTrans);
         }

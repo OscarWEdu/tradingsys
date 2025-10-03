@@ -8,7 +8,7 @@ bool is_running = true;
 //Checks if a user is logged in, if not, send them to the login page, else use screenhandler to handle which page they are on
 while (is_running)
 {
-    // Console.Clear();
+    Console.Clear();
     if (!tradingSystem.IsLoggedIn()) { tradingSystem.LoginScreen(); }
     else { ScreenHandler(); }
 

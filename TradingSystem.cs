@@ -6,7 +6,7 @@ class TradingSystem
     List<User> Users = new List<User>();
     List<Item> Items = new List<Item>();
     List<Transaction> Transactions = new List<Transaction>();
-    User? ActiveUser = null;
+    private User? ActiveUser = null;
     private Screen _CurrentScreen = Screen.Main;
     public Screen CurrentScreen { get { return _CurrentScreen; } }
 
@@ -19,8 +19,17 @@ class TradingSystem
     //     Items.Add(new Item("Pencil", "A pencil", "2"));
     //     Items.Add(new Item("Man", "A living human man", "1"));
     //     Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
-    //     Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
-    //     Transactions.Add(new Transaction(GetItem("Lizard"), GetItem("Man")));
+    //     List<Item?> ItemsIn1 = new List<Item?>();
+    //     List<Item?> ItemsOut1 = new List<Item?>();
+    //     List<Item?> ItemsIn2 = new List<Item?>();
+    //     List<Item?> ItemsOut2 = new List<Item?>();
+    //     ItemsIn1.Add(GetItem("Boat"));
+    //     ItemsIn2.Add(GetItem("Lizard"));
+    //     ItemsOut1.Add(GetItem("Pencil"));
+    //     ItemsOut2.Add(GetItem("Man"));
+
+    //     Transactions.Add(new Transaction(ItemsIn1, ItemsOut1));
+    //     Transactions.Add(new Transaction(ItemsIn2, ItemsOut2));
     // }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
@@ -63,16 +72,35 @@ class TradingSystem
     {
         DisplayItems(false);
         Console.WriteLine("Type in the name of the item you would like to trade for:");
-        string ItemInName = Console.ReadLine();
+        string ItemName = Console.ReadLine();
         List<Item?> ItemsIn = new List<Item?>();
-        ItemsIn.Add(GetItem(ItemInName));
+        ItemsIn.Add(GetItem(ItemName));
+        AddItems(ItemsIn);
         Console.WriteLine("Type in the name of the owned item you are offering:");
         DisplayItems(true);
-        string ItemOutName = Console.ReadLine();
+        ItemName = Console.ReadLine();
         List<Item?> ItemsOut = new List<Item?>();
-        ItemsOut.Add(GetItem(ItemOutName));
+        ItemsOut.Add(GetItem(ItemName));
+        AddItems(ItemsOut);
         if (ItemsIn[0] != null && ItemsOut[0] != null) { Transactions.Add(new Transaction(ItemsOut, ItemsIn)); }
         ReturnToMain();
+    }
+
+    //Allows the user to keep adding Items to a given list
+    private void AddItems(List<Item?> ItemList)
+    {
+        string UserInput = "";
+        bool KeepTrading = true;
+        while (KeepTrading) //Oh yeah these two loops could absolutely be refactore to be a method, I'm well aware lol
+        {
+            KeepTrading = false;
+            Console.WriteLine("Would you like to trade another item? (Y/N)");
+            UserInput = NormalizedInput();
+            if (UserInput == "y") { KeepTrading = true; break; }
+            Console.WriteLine("Type in the name of the item you would like to trade:");
+            UserInput = Console.ReadLine();
+            ItemList.Add(GetItem(UserInput));
+        }
     }
 
     //Gets Item by Name
@@ -119,16 +147,19 @@ class TradingSystem
 
     private void CompleteTransaction(Transaction transaction)
     {
-        TradeItem(transaction.ItemsSent[0], transaction.ItemsRecieved[0]);
+        TradeItem(transaction.ItemsSent, transaction.ItemsRecieved);
         transaction.CompleteTransaction();
     }
 
     //Swaps the Owner variable of 2 items
-    private void TradeItem(Item ItemSent, Item ItemRecieved)
+    private void TradeItem(List<Item> ItemsSent, List<Item> ItemsRecieved)
     {
-        string Recipient = ItemRecieved.Owner;
-        ItemRecieved.Owner = ItemSent.Owner;
-        ItemSent.Owner = Recipient;
+        foreach (Item ItemRecieved in ItemsRecieved)
+        {
+            string Recipient = ItemRecieved.Owner;
+            ItemRecieved.Owner = ItemsSent[ItemsRecieved.IndexOf(ItemRecieved)].Owner;
+            ItemsSent[ItemsRecieved.IndexOf(ItemRecieved)].Owner = Recipient;
+        }
     }
 
     //Displays all completed transactions

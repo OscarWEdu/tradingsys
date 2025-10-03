@@ -165,7 +165,7 @@ class TradingSystem
     //Displays all completed transactions
     public void HistoryScreen()
     {
-        Console.WriteLine("Completed Transactions:");
+        Console.WriteLine("Completed Transactions:  (Trades with more than 1 item are concatenated to only show 1 of the items traded)");
         foreach (Transaction transaction in Transactions)
         {
             if (!transaction.IsPending())
@@ -183,9 +183,12 @@ class TradingSystem
         Console.WriteLine("Pending Transactions:");
         foreach (Transaction transaction in Transactions)
         {
-            if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
+            if (transaction.ItemsRecieved != null)
             {
-                transaction.Print();
+                if (transaction.IsPending() && transaction.IsRecipient(ActiveUser.GetName()))
+                {
+                    transaction.Print();
+                }
             }
         }
         Console.WriteLine("Type the name of the item in the trade you would like to accept\nType clr followed by the name to reject the trade\nOr type anything else to return to main menu");
@@ -322,6 +325,7 @@ class TradingSystem
     //Creates Transactions based on an input string representing the data of 1 or more transactions, fetches the items matching the Item data stored, then add all Transaction to the Transactions list
     private void LoadTransactions(string TransactionData)
     {
+        int ItemVariables = 3; //The number of variables contained in the Item object
         string[] SplitData = TransactionData.Split("\n" + Convert.ToChar(0).ToString(), StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         foreach (string Data in SplitData)
         {
@@ -329,11 +333,17 @@ class TradingSystem
 
             List<Item?> ItemsIn = new List<Item?>();
             List<Item?> ItemsOut = new List<Item?>();
-            ItemsOut.Add(GetItem(DataField[2]));
-            ItemsIn.Add(GetItem(DataField[5]));
-            if (ItemsIn[0] != null && ItemsOut[0] != null) { Transactions.Add(new Transaction(ItemsOut, ItemsIn)); }
+            for (int i = 0; i < int.Parse(DataField[2]); i++)
+            {
+                ItemsOut.Add(GetItem(DataField[4 + (i * ItemVariables )]));
+            }
+            for (int i = 0; i < int.Parse(DataField[3]); i++)
+            {
+                ItemsIn.Add(GetItem(DataField[4 + i + (int.Parse(DataField[2]) * ItemVariables)]));
+            }
             Transaction LoadedTrans = new Transaction(ItemsOut, ItemsIn);
             LoadedTrans.LoadTransactionData(bool.Parse(DataField[0]), DateTime.Parse(DataField[1])); //Todo: use tryparse
+            // if (ItemsIn.Any() && ItemsOut.Any()) { Transactions.Add(LoadedTrans); }
             Transactions.Add(LoadedTrans);
         }
     }

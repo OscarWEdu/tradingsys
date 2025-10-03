@@ -2,12 +2,13 @@
 
 TradingSystem tradingSystem = new TradingSystem();
 
-bool is_running = true;
+tradingSystem.LoadData();
 
+bool is_running = true;
 //Checks if a user is logged in, if not, send them to the login page, else use screenhandler to handle which page they are on
 while (is_running)
 {
-    Console.Clear();
+    // Console.Clear();
     if (!tradingSystem.IsLoggedIn()) { tradingSystem.LoginScreen(); }
     else { ScreenHandler(); }
 
@@ -18,7 +19,7 @@ while (is_running)
         Console.Clear();
         is_running = false;
     }
-    tradingSystem.StoreItems();
+    tradingSystem.StoreData();
 }
 
 //Executes the *Screen Method corresponding with the CurrentScreen variable

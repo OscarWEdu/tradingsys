@@ -22,6 +22,12 @@ class Transaction
         TransDate = DateTime.Now;
     }
 
+    public void LoadTransactionData(bool pending, DateTime transDate)
+    {
+        Pending = pending;
+        TransDate = TransDate;
+    }
+
     //Outputs all variables as a string array, including the variables of the Item objects
     public List<string> WriteAsString()
     {

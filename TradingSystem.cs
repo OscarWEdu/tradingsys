@@ -1,3 +1,4 @@
+using System.IO;
 namespace TradeSys;
 
 class TradingSystem
@@ -7,20 +8,20 @@ class TradingSystem
     List<Transaction> Transactions = new List<Transaction>();
     User ActiveUser = null;
     private int _CurrentScreen = (int)Screen.Main;
-    public int CurrentScreen {get { return _CurrentScreen; }}
+    public int CurrentScreen { get { return _CurrentScreen; } }
 
-    //Creates some test data
-    public TradingSystem()
-    {
-        Users.Add(new User("1", "1"));
-        Users.Add(new User("2", "2"));
-        Items.Add(new Item("Boat", "A full size boat, should definitely not be traded for a pencil", "1"));
-        Items.Add(new Item("Pencil", "A pencil", "2"));
-        Items.Add(new Item("Man", "A living human man", "1"));
-        Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
-        Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
-        Transactions.Add(new Transaction(GetItem("Lizard"), GetItem("Man")));
-    }
+    // //Creates some test data
+    // public TradingSystem()
+    // {
+    //     Users.Add(new User("1", "1"));
+    //     Users.Add(new User("2", "2"));
+    //     Items.Add(new Item("Boat", "A full size boat, should definitely not be traded for a pencil", "1"));
+    //     Items.Add(new Item("Pencil", "A pencil", "2"));
+    //     Items.Add(new Item("Man", "A living human man", "1"));
+    //     Items.Add(new Item("Lizard", "Some crawly gecko", "2"));
+    //     Transactions.Add(new Transaction(GetItem("Boat"), GetItem("Pencil")));
+    //     Transactions.Add(new Transaction(GetItem("Lizard"), GetItem("Man")));
+    // }
 
     //Main loop, checks if active user is null, if so sets Current Screen to Login. Then throws the user into the relevant method depending on choice
     public void MainScreen()
@@ -113,7 +114,7 @@ class TradingSystem
         Items.Add(new Item(Name, Description, ActiveUser.GetName()));
         ReturnToMain();
     }
-    
+
     private void CompleteTransaction(Transaction transaction)
     {
         TradeItem(transaction.ItemSent, transaction.ItemRecieved);
@@ -223,45 +224,81 @@ class TradingSystem
     }
 
     //Stores all variables of objects to a csv file 
-    public void StoreItems()
+    public void StoreData()
     {
-        List<string> output = new List<string>();
-        foreach (User user in Users)
+        if (Users.Count != 0)
         {
-            output.AddRange(user.GetFields());
-            output.Add("");
-        }
-        output.Add(Convert.ToChar(128).ToString());
-        foreach (Item item in Items)
-        {
-            output.AddRange(item.GetFields());
-            output.Add("");
-        }
-        output.Add(Convert.ToChar(128).ToString());
-        foreach (Transaction transaction in Transactions)
-        {
-            output.AddRange(transaction.WriteAsString());
-            output.Add("");
-        }
-        foreach (string point in output)
-        {
-            if (point == "")
+            List<string> output = new List<string>();
+            foreach (User user in Users)
             {
-                Console.WriteLine("YES");
+                output.AddRange(user.GetFields());
+                output.Add(Convert.ToChar(0).ToString());
             }
+            output.Add(Convert.ToChar(128).ToString());
+            foreach (Item item in Items)
+            {
+                output.AddRange(item.GetFields());
+                output.Add(Convert.ToChar(0).ToString());
+            }
+            output.Add(Convert.ToChar(128).ToString());
+            foreach (Transaction transaction in Transactions)
+            {
+                output.AddRange(transaction.WriteAsString());
+                output.Add(Convert.ToChar(0).ToString());
+            }
+            File.WriteAllLines("backup.csv", output);
         }
-        File.WriteAllLines("backup.csv", output);
     }
 
-
-    private void LoadItems()
+    //Loads data from csv file and populates the list with created objects
+    public void LoadData()
     {
-        String[] items_csv = File.ReadAllLines("backup.csv");
-
-        foreach (string data in items_csv)
+        string path = "backup.csv";
+        if (File.Exists(path))
         {
-            string[] split_data = data.Split(",");
-            Items.Add(new Item(split_data[0], split_data[1], split_data[2]));
+            string csv_data = File.ReadAllText(path);
+            string[] DataFields = csv_data.Split("\n" + Convert.ToChar(128).ToString());
+            LoadUsers(DataFields[0]);
+            LoadItems(DataFields[1]);
+            LoadTransactions(DataFields[2]);
+        }
+    }
+
+    //Creates Users based on an input string representing the data of 1 or more users, then add them to the Users list
+    private void LoadUsers(string UserData)
+    {
+        string[] SplitData = UserData.Split("\n" + Convert.ToChar(0).ToString(), StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (string Data in SplitData)
+        {
+            string[] DataField = Data.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            Users.Add(new User(DataField[0], DataField[1]));
+        }
+    }
+
+    //Creates Items based on an input string representing the data of 1 or more items, then add them to the Items list
+    private void LoadItems(string ItemData)
+    {
+        string[] SplitData = ItemData.Split("\n" + Convert.ToChar(0).ToString(), StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (string Data in SplitData)
+        {
+            string[] DataField = Data.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            Items.Add(new Item(DataField[0], DataField[1], DataField[2]));
+        }
+    }
+
+    //Creates Transactions based on an input string representing the data of 1 or more transactions, fetches the items matching the Item data stored, then add all Transaction to the Transactions list
+    private void LoadTransactions(string TransactionData)
+    {
+        string[] SplitData = TransactionData.Split("\n" + Convert.ToChar(0).ToString(), StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (string Data in SplitData)
+        {
+            string[] DataField = Data.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            Item ItemOut = GetItem(DataField[2]);
+            Item ItemIn = GetItem(DataField[5]);
+            Transaction LoadedTrans = new Transaction(ItemOut, ItemIn);
+            LoadedTrans.LoadTransactionData(bool.Parse(DataField[0]), DateTime.Parse(DataField[1])); //Todo: use tryparse
+            Transactions.Add(LoadedTrans);
         }
     }
 

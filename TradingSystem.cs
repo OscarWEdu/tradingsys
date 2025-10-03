@@ -41,6 +41,7 @@ class TradingSystem
         }
     }
 
+    //TODO: Include tests to make sure input isn't empty
     string NormalizedInput()
     {
         return Console.ReadLine().ToLower();
@@ -251,6 +252,7 @@ class TradingSystem
         }
         File.WriteAllLines("backup.csv", output);
     }
+
 
     private void LoadItems()
     {

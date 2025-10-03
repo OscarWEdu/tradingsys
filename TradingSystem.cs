@@ -7,8 +7,8 @@ class TradingSystem
     List<Item> Items = new List<Item>();
     List<Transaction> Transactions = new List<Transaction>();
     private User? ActiveUser = null;
-    private Screen _CurrentScreen = Screen.Main;
-    public Screen CurrentScreen { get { return _CurrentScreen; } }
+    private Screen _currentScreen = Screen.Main;
+    public Screen CurrentScreen { get { return _currentScreen; } }
 
     // //Creates some test data
     // public TradingSystem()
@@ -40,12 +40,12 @@ class TradingSystem
 
         switch (Input)
         {
-            case "browse": _CurrentScreen = Screen.Browse; break;
-            case "add": _CurrentScreen = Screen.Add; break;
-            case "send": _CurrentScreen = Screen.Send; break;
-            case "history": _CurrentScreen = Screen.History; break;
-            case "pending": _CurrentScreen = Screen.Pending; break;
-            case "logout": _CurrentScreen = Screen.Logout; break;
+            case "browse": _currentScreen = Screen.Browse; break;
+            case "add": _currentScreen = Screen.Add; break;
+            case "send": _currentScreen = Screen.Send; break;
+            case "history": _currentScreen = Screen.History; break;
+            case "pending": _currentScreen = Screen.Pending; break;
+            case "logout": _currentScreen = Screen.Logout; break;
 
             default: Console.WriteLine("Invalid Input"); break;
         }
@@ -57,8 +57,8 @@ class TradingSystem
         return Console.ReadLine().ToLower();
     }
 
-    //Sets _CurrentScreen to Main, this is then handled by the main program loop.
-    private void ReturnToMain() { _CurrentScreen = Screen.Main; }
+    //Sets _currentScreen to Main, this is then handled by the main program loop.
+    private void ReturnToMain() { _currentScreen = Screen.Main; }
 
     //Displays all owned items
     public void BrowseScreen()
@@ -212,7 +212,7 @@ class TradingSystem
     public void LogoutScreen()
     {
         ActiveUser = null;
-        _CurrentScreen = Screen.Login; //TODO: Never gets checked
+        _currentScreen = Screen.Login; //TODO: Never gets checked
     }
 
     //Allows the user to create a new User and adds it to the list

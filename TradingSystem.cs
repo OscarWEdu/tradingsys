@@ -221,30 +221,33 @@ class TradingSystem
         return null;
     }
 
+    //Stores all variables of objects to a csv file 
     public void StoreItems()
     {
         List<string> output = new List<string>();
         foreach (User user in Users)
         {
             output.AddRange(user.GetFields());
-            output.Add("\n");
+            output.Add("");
         }
-        output.Add("\n");
+        output.Add("\\");
         foreach (Item item in Items)
         {
             output.AddRange(item.GetFields());
-            output.Add("\n");
+            output.Add("");
         }
-        output.Add("\n");
+        output.Add("\\");
         foreach (Transaction transaction in Transactions)
         {
             output.AddRange(transaction.WriteAsString());
-            output.Add("\n");
+            output.Add("");
         }
-        output.Add("\n");
         foreach (string point in output)
         {
-            Console.WriteLine(point);
+            if (point == "")
+            {
+                Console.WriteLine("YES");
+            }
         }
         File.WriteAllLines("backup.csv", output);
     }

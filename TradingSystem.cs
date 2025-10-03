@@ -230,13 +230,13 @@ class TradingSystem
             output.AddRange(user.GetFields());
             output.Add("");
         }
-        output.Add("\\");
+        output.Add(Convert.ToChar(128).ToString());
         foreach (Item item in Items)
         {
             output.AddRange(item.GetFields());
             output.Add("");
         }
-        output.Add("\\");
+        output.Add(Convert.ToChar(128).ToString());
         foreach (Transaction transaction in Transactions)
         {
             output.AddRange(transaction.WriteAsString());
